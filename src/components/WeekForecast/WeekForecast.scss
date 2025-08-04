@@ -1,0 +1,109 @@
+@import '../../styles/mixin.scss';
+
+.week-forecast-conainer {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+
+    >p:first-of-type {
+        font-size: 32px;
+    }
+
+    .continous-day-weather-container {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+
+        .weather-eachday-container {
+            text-align: center;
+            padding: 10px;
+
+            img {
+                width: 100px;
+                height: 100px;
+            }
+            .temp{
+                font-size: 24px;
+                margin-bottom: 8px;
+            }
+        }
+    }
+
+}
+
+@include respond-to('tablet') {
+    .week-forecast-conainer {
+        font-size: 16px;
+
+        .continous-day-weather-container {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+
+            .weather-eachday-container {
+                display: flex;
+                align-items: center;
+                padding: 5px;
+
+                img {
+                    width: 50px;
+                    height: 50px;
+                }
+
+                .date {
+                    flex: 1;
+                    text-align: left;
+                }
+
+                .temp {
+                    width: 15%;
+                    margin-bottom: 0;
+                }
+
+                .weather {
+                    width: 30%;
+                }
+            }
+        }
+    }
+}
+
+@include respond-to('mobile') {
+    .week-forecast-conainer {
+        font-size: 14px;
+
+        .continous-day-weather-container {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+
+            .weather-eachday-container {
+                display: flex;
+                align-items: center;
+                padding: 5px;
+
+                img {
+                    width: 40px;
+                    height: 40px;
+                }
+
+                .date {
+                    flex: 1;
+                    text-align: left;
+                }
+
+                .temp {
+                    width: 20%;
+                    margin-bottom: 0;
+                    font-size: 16px;
+                }
+
+                .weather {
+                    width: 40%;
+                }
+            }
+        }
+    }
+}
