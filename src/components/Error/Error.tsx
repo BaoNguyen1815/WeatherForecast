@@ -10,7 +10,8 @@ const Error: React.FC<ErrorProps> = ({ message }) => {
     return (
         <div className='error'>
             <img src="/images/error.png" alt="Error" />
-            <h2>{message || "Something went wrong."}</h2>
+            <h1>Something went wrong</h1>
+            <h2>Error message: {message}</h2>
         </div>
     )
 }
