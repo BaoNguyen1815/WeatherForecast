@@ -8,33 +8,22 @@ import { convertKelvinToCelsius, convertKelvinToFahrenheit } from '@/utils/Conve
 import './WeekForecast.scss';
 import Error from '../Error/Error';
 import Spinner from '../Spinner/Spinner';
+import { useCurrentLocation } from '@/hooks/useCurrentLocation';
 
 const WeekForecast = () => {
     const isFahrenheit = useSelector((state: any) => state.settings.isFahrenheit);
     const weatherData: WeatherData = useSelector((state: any) => state.weather.weatherData);
     const errorFindByCity = useSelector((state: any) => state.weather.error);
-    const [coords, setCoords] = React.useState<{ lat: number; lon: number } | null>(null);
+    const { coords, setCoords, requestLocation } = useCurrentLocation();
     useEffect(() => {
-        if (!weatherData) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        setCoords({
-                            lat: position.coords.latitude,
-                            lon: position.coords.longitude,
-                        });
-                    },
-                    (err) => {
-                        console.error("Geolocation error:", err);
-                    }
-                );
-            }
-        }
-        else {
+        if(weatherData){
             setCoords({
                 lat: weatherData.coord.lat,
                 lon: weatherData.coord.lon,
             });
+        }
+        else{
+            requestLocation();
         }
     }, [weatherData]);
 

@@ -5,4 +5,9 @@
     padding: 20px;
     background-color: #282c34;
     color: #ffffff;
+    .title{
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }

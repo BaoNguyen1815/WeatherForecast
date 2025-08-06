@@ -5,7 +5,7 @@ import Link from 'next/link'
 const Header = () => {
   return (
    <div className='header'>
-        <Link href={'/'} className='title'>Weather Forecast</Link>
+        <Link href={'/'} className='title' title="To current weather page">Weather Forecast</Link>
         <div className='search-bar-container'>
             <SearchInput />
         </div>

@@ -11,30 +11,21 @@ import { weatherSlice } from '@/store/WeatherReducer';
 import Link from 'next/link';
 import Error from '../Error/Error';
 import { setIsFahrenheit } from '@/store/UnitReducer';
+import { useCurrentLocation } from '@/hooks/useCurrentLocation';
 
 const CurrentDayWeather = () => {
   const weatherData: WeatherData = useSelector((state: any) => state.weather.weatherData);
   const loading: boolean = useSelector((state: any) => state.weather.loading);
   const error: string | null = useSelector((state: any) => state.weather.error);
   const isFahrenheit = useSelector((state: any) => state.settings.isFahrenheit);
-  const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null);
+  const { coords, requestLocation } = useCurrentLocation();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setCoords({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-          });
-        },
-        (err) => {
-          console.error("Geolocation error:", err);
-        }
-      );
+    if(!weatherData && !coords) {
+      requestLocation();
     }
-  }, [])
+  }, [weatherData]);
 
   const { data, isLoading, error: queryError } = useWeatherQuery(
     coords?.lat ?? 0,
@@ -43,10 +34,10 @@ const CurrentDayWeather = () => {
   );
 
   useEffect(() => {
-  if (isLoading) {
-    dispatch(weatherSlice.actions.fetchWeatherStart());
-  }
-}, [isLoading, dispatch]);
+    if (isLoading) {
+      dispatch(weatherSlice.actions.fetchWeatherStart());
+    }
+  }, [isLoading, dispatch]);
 
   useEffect(() => {
     if (data && !weatherData) {
@@ -65,7 +56,7 @@ const CurrentDayWeather = () => {
     return <Spinner />;
   }
   if (error) {
-   return <Error message={error}/>
+    return <Error message={error} />
   }
   if (weatherData) {
     return <div className='current-day-weather'>
