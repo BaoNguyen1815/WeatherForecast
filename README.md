@@ -29,3 +29,11 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 
+### Run test
+1.Get cypress ready for Node ver22.18.0: https://docs.cypress.io/app/get-started/install-cypress
+
+2.Run
+```bash
+npm run test:e2e;
+npx cypress open
+```
