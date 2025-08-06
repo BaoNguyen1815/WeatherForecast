@@ -18,6 +18,7 @@ const SearchInput: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!search.trim()) return;
     dispatch(weatherSlice.actions.fetchWeatherStart());
     setShowSuggestions(false);
     setSearch('');
