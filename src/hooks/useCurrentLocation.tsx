@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { weatherSlice } from '@/store/WeatherReducer';
 
@@ -26,9 +26,20 @@ export function useCurrentLocation() {
             );
         } else {
             dispatch(weatherSlice.actions.fetchWeatherFailure("We cannot get your current location. Please allow location access or enter a city name on search bar."));
-
         }
     }, []);
 
+    useEffect(() => {
+        if (!navigator.permissions) return;
+
+        navigator.permissions.query({ name: 'geolocation' }).then((permissionStatus) => {
+            permissionStatus.onchange = () => {
+                console.log('Geolocation permission status changed:', permissionStatus.state);
+                if (permissionStatus.state === 'granted') {
+                    requestLocation();
+                }
+            };
+        });
+    }, []);
     return { coords, setCoords, requestLocation };
 }

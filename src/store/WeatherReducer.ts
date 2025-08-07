@@ -7,7 +7,7 @@ const initialState: {
   error: string | null;
 } = {
   weatherData: null,
-  loading: true,
+  loading: false,
   error: null,
 };
 

@@ -3,7 +3,7 @@
 import { useWeatherQuery } from '@/queries/weather';
 import { WeatherData } from '@/types/Weather';
 import { convertKelvinToCelsius, convertKelvinToFahrenheit } from '@/utils/ConvertKelvinDegree';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../Spinner/Spinner';
 import './CurrentDayWeather.scss';
@@ -25,7 +25,7 @@ const CurrentDayWeather = () => {
     if(!weatherData && !coords) {
       requestLocation();
     }
-  }, [weatherData]);
+  }, [weatherData, coords, requestLocation]);
 
   const { data, isLoading, error: queryError } = useWeatherQuery(
     coords?.lat ?? 0,
@@ -41,7 +41,6 @@ const CurrentDayWeather = () => {
 
   useEffect(() => {
     if (data && !weatherData) {
-      console.log("Weather data fetched successfully:", data);
       dispatch(weatherSlice.actions.fetchWeatherSuccess(data as WeatherData));
     }
   }, [data, dispatch]);
@@ -52,8 +51,12 @@ const CurrentDayWeather = () => {
     }
   }, [queryError, dispatch]);
 
+  
   if (loading) {
     return <Spinner />;
+  }
+  if( error?.includes("location access")) {
+    return <p>Please enter a city name</p>;
   }
   if (error) {
     return <Error message={error} />
@@ -78,7 +81,7 @@ const CurrentDayWeather = () => {
       </div>
     </div>;
   }
-  return <p>Please enter a city name</p>
+  return <Spinner />
 
 }
 

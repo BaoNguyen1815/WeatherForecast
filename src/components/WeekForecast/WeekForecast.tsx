@@ -13,21 +13,22 @@ import { useCurrentLocation } from '@/hooks/useCurrentLocation';
 const WeekForecast = () => {
     const isFahrenheit = useSelector((state: any) => state.settings.isFahrenheit);
     const weatherData: WeatherData = useSelector((state: any) => state.weather.weatherData);
+    const loading: boolean = useSelector((state: any) => state.weather.loading);
     const errorFindByCity = useSelector((state: any) => state.weather.error);
     const { coords, setCoords, requestLocation } = useCurrentLocation();
     useEffect(() => {
-        if(weatherData){
+        if (weatherData) {
             setCoords({
                 lat: weatherData.coord.lat,
                 lon: weatherData.coord.lon,
             });
         }
-        else{
+        else {
             requestLocation();
         }
     }, [weatherData]);
 
-    const { data, error } = useWeekForecastQuery(coords?.lat ?? 0, coords?.lon ?? 0);
+    const { data, isLoading, error } = useWeekForecastQuery(coords?.lat ?? 0, coords?.lon ?? 0);
 
     const weatherEachDay = (dayLabel: string, iconUrl: string, tempK: number, weather: string) => {
         const temp = isFahrenheit ? convertKelvinToFahrenheit(tempK) : convertKelvinToCelsius(tempK);
@@ -56,18 +57,28 @@ const WeekForecast = () => {
         }
         return <></>
     }
-    if (error || errorFindByCity) {
-        return <Error message = {errorFindByCity || error}/>
+
+    if (isLoading || loading) {
+        return <Spinner />;
     }
 
-    return (
-        <div className='week-forecast-conainer'>
-            <p>Daily weather in <b>{weatherData?.name ?? "your place"}</b></p>
-            {data?.daily ? <div className='continous-day-weather-container'>
-                {renderWeekForecast()}
-            </div>: <Spinner />}
-        </div>
-    )
+    if (data) {
+        return (
+            <div className='week-forecast-conainer'>
+                <p>Daily weather in <b>{weatherData?.name ?? "your place"}</b></p>
+                {data?.daily ? <div className='continous-day-weather-container'>
+                    {renderWeekForecast()}
+                </div> : <Spinner />}
+            </div>
+        )
+    }
+    if(errorFindByCity?.includes("location access")) {
+        return <p>Please enter a city name</p>
+    }
+    if (error || errorFindByCity) {
+        return <Error message={errorFindByCity || error} />
+    }
+    return <Spinner />;
 }
 
 export default WeekForecast
