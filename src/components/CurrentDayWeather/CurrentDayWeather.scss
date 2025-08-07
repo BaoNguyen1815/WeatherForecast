@@ -1,4 +1,4 @@
-@import '../../styles/mixin.scss';
+@use '../../styles/mixin.scss';
 
 .current-day-weather {
     display: flex;
@@ -101,7 +101,7 @@
     }
 }
 
-@include respond-to('tablet') {
+@include mixin.respond-to('tablet') {
     .current-day-weather {
         .details {
             gap: 16px;

@@ -1,4 +1,4 @@
-@import '../../styles/mixin.scss';
+@use '../../styles/mixin';
 
 .week-forecast-conainer {
     width: 100%;
@@ -35,7 +35,7 @@
 
 }
 
-@include respond-to('tablet') {
+@include mixin.respond-to('tablet') {
     .week-forecast-conainer {
         font-size: 16px;
 
@@ -71,7 +71,7 @@
     }
 }
 
-@include respond-to('mobile') {
+@include mixin.respond-to('mobile') {
     .week-forecast-conainer {
         font-size: 14px;
 

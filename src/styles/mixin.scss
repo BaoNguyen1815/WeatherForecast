@@ -1,5 +1,5 @@
 
-// Usage: @include respond-to('md') { ... }
+@use "sass:map";
 
 $breakpoints: (
   'mobile': 600px,
@@ -8,7 +8,7 @@ $breakpoints: (
 );
 
 @mixin respond-to($breakpoint) {
-  $size: map-get($breakpoints, $breakpoint);
+  $size: map.get($breakpoints, $breakpoint);
   @if $size {
     @media (max-width: $size) {
       @content;
